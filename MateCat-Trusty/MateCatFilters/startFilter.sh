@@ -8,15 +8,17 @@ if [ ! -d "/var/www/MateCat-Filters/" ]; then
     mvn clean install -DskipTests=true
 
     echo "build matecat filters layer"
-    git clone https://github.com/matecat/MateCat-Filters.git
+    git clone https://github.com/freegenie/MateCat-Filters.git
     cd /var/www/okapi/MateCat-Filters
     mvn clean package -DskipTests=true
 
     echo "Setting configurations"
-    cd /var/www/okapi/MateCat-Filters/target
+    cd /var/www/okapi/MateCat-Filters/filters/target
     cp ../src/main/resources/config.sample.properties config.properties
+
     mkdir -p /var/www/MateCat-Filters/
-    cp -a /var/www/okapi/MateCat-Filters/target/* /var/www/MateCat-Filters/
+
+    cp -a /var/www/okapi/MateCat-Filters/filters/target/* /var/www/MateCat-Filters/
 
     echo "Purge Maven"
     # mvn dependency:purge-local-repository -DactTransitively=false -DreResolve=false
@@ -26,7 +28,7 @@ fi
 echo "Starting Filter\n"
 cd /var/www/MateCat-Filters/
 
-java -cp ".:filters-1.1.4.jar" com.matecat.converter.Main
+java -cp ".:filters-1.2.0.jar" com.matecat.converter.Main
 
 RET=1
 while [[ RET -ne 0 ]]; do
